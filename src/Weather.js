@@ -1,25 +1,78 @@
-import React from "react";
-import axios from "axios";
-import { Audio } from "react-loader-spinner";
+import React, { useState } from "react";
+import "./styles.css"; // Assuming your CSS is in src/styles.css
 
-export default function Weather(props) {
+const WeatherApp = () => {
+  const [city, setCity] = useState("Paris");
+  const [weatherDetails, setWeatherDetails] = useState({
+    temp: 24,
+    description: "moderate rain",
+    humidity: 87,
+    wind: "7.2km/h",
+  });
 
-    function handleresponse(response) {
-        alert(`The weather in ${response.data.name} is ${response.data.main.temp}`)
-    }
-    let apiKey = "c8a77112b2faf6684bb4b21a0aa778ae";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${props.city}&appid=${apiKey}&units=metric`;
-    
-    axios.get(apiUrl).then(handleresponse);
-    return (
-      <Audio
-        height="80"
-        width="80"
-        radius="9"
-        color="blue"
-        ariaLabel="loading"
-        wrapperStyle
-        wrapperClass
-      />
-    );
+  const [searchCity, setSearchCity] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Set the city and leave other details static
+    setCity(searchCity);
+  };
+
+  return (
+    <div className="weather-app">
+      <header>
+        <form id="search-form" onSubmit={handleSubmit}>
+          <input
+            type="search"
+            placeholder="Enter a city.."
+            required
+            className="search-input"
+            id="search-input"
+            value={searchCity}
+            onChange={(e) => setSearchCity(e.target.value)}
+          />
+          <input type="submit" value="Search" className="search-button" />
+        </form>
+      </header>
+      <main>
+        <div className="current-weather">
+          <div>
+            <h1 className="current-city" id="current-city">
+              {city}
+            </h1>
+            <p className="current-details">
+              {new Date().toLocaleDateString()}, {weatherDetails.description}{" "}
+              <br />
+              Humidity: <strong>{weatherDetails.humidity}%</strong>, Wind:{" "}
+              <strong>{weatherDetails.wind}</strong>
+            </p>
+          </div>
+          <div className="current-temperature">
+            <span className="current-temperature-icon">☀️</span>
+            <span className="current-temperature-value">
+              <span id="current-temp">{weatherDetails.temp}</span>
+            </span>
+            <span className="current-temperature-unit">°C</span>
+          </div>
+        </div>
+      </main>
+      <footer>
+        <p>
+          This project was coded by Margaret Jumbo
+          <a href="#" target="_blank" rel="noreferrer">
+            {" "}
+            on GitHub
+          </a>{" "}
+          and{" "}
+          <a href="#" target="_blank" rel="noreferrer">
+            hosted on Netlify
+          </a>
+        </p>
+      </footer>
+    </div>
+  );
+};
+
+export default function Weather() {
+  
 }
